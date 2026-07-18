@@ -6,7 +6,7 @@ into ISO 20022 pacs.008 XML.** A single `parse_mt103(text)` call
 returns a one-element `list[dict]` ready to feed straight into
 pacs.008 generation.
 
-> **Latest release: v0.0.1.** The first deliverable of the MT→MX
+> **Latest release: v0.0.2.** The first deliverable of the MT→MX
 > converter project. SWIFT MT-MX coexistence for cross-border payments
 > ends in **November 2025**; this loader bridges the window where
 > upstream systems still emit MT103 but downstream tooling expects

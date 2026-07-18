@@ -46,6 +46,6 @@ disclosure process in [SECURITY.md](SECURITY.md).
 
 | Version | Supported? |
 | :--- | :--- |
-| 0.0.1 (latest) | ✅ |
+| 0.0.2 (latest) | ✅ |
 
-Requires Python 3.10+ and `pacs008 >= 0.0.5`.
+Requires Python 3.10+ and `pacs008 >= 0.0.7`.

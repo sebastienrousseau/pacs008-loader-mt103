@@ -1,6 +1,6 @@
 [project]
 name = "pacs008-loader-mt103"
-version = "0.0.1"
+version = "0.0.2"
 description = "Convert legacy SWIFT MT103 customer credit transfers to ISO 20022 pacs.008 flat records."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -29,7 +29,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "pacs008 >= 0.0.5, < 1",
+    "pacs008 >= 0.0.7, < 1",
 ]
 
 [project.optional-dependencies]
