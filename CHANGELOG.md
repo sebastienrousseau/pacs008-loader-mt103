@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This package's version follows the [`pacs008`](https://github.com/sebastienrousseau/pacs008)
 suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
+## [0.0.2] - 2026-07-18
+
+### Changed
+
+- chore(deps): require `pacs008>=0.0.7` (was `>=0.0.5`) to pick up the
+  0.0.7 validation bug fix. No API changes in this loader.
+
 ## [0.0.1] - 2026-07-12
 
 ### Added
@@ -45,4 +52,5 @@ records feed straight into pacs.008 generation.
 - A parsed record is verified schema-valid against the real
   `pacs008` `SchemaValidator("pacs.008.001.08")` in the test suite.
 
+[0.0.2]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.2
 [0.0.1]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.1
