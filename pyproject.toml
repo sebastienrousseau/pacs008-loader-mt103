@@ -4,7 +4,7 @@ version = "0.0.3"
 description = "Convert legacy SWIFT MT103 customer credit transfers to ISO 20022 pacs.008 flat records."
 readme = "README.md"
 requires-python = ">=3.10"
-license = "Apache-2.0"
+license = "Apache-2.0 OR MIT"
 authors = [{ name = "Sebastien Rousseau", email = "sebastian.rousseau@gmail.com" }]
 keywords = [
     "iso20022",
