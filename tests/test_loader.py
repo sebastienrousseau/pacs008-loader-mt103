@@ -285,9 +285,7 @@ def test_raw_block4_envelope_is_unwrapped() -> None:
 
 def test_missing_sender_reference_raises() -> None:
     """A payload without :20: raises ValueError mentioning :20:."""
-    mt103 = (
-        ":32A:260712EUR100,00\n" ":59:/GB29NWBK60161331926819\n" "ACME TRADING LTD\n"
-    )
+    mt103 = ":32A:260712EUR100,00\n:59:/GB29NWBK60161331926819\nACME TRADING LTD\n"
     with pytest.raises(ValueError, match=":20:"):
         parse_mt103(mt103)
 
@@ -295,10 +293,7 @@ def test_missing_sender_reference_raises() -> None:
 def test_empty_sender_reference_raises() -> None:
     """A :20: with an empty value raises (msg_id is required)."""
     mt103 = (
-        ":20:\n"
-        ":32A:260712EUR100,00\n"
-        ":59:/GB29NWBK60161331926819\n"
-        "ACME TRADING LTD\n"
+        ":20:\n:32A:260712EUR100,00\n:59:/GB29NWBK60161331926819\nACME TRADING LTD\n"
     )
     with pytest.raises(ValueError, match=":20:"):
         parse_mt103(mt103)
@@ -306,37 +301,27 @@ def test_empty_sender_reference_raises() -> None:
 
 def test_missing_value_date_amount_raises() -> None:
     """A payload without :32A: raises ValueError mentioning :32A:."""
-    mt103 = ":20:REF\n" ":59:/GB29NWBK60161331926819\n" "ACME TRADING LTD\n"
+    mt103 = ":20:REF\n:59:/GB29NWBK60161331926819\nACME TRADING LTD\n"
     with pytest.raises(ValueError, match=":32A:"):
         parse_mt103(mt103)
 
 
 def test_malformed_value_date_amount_raises() -> None:
     """A malformed :32A: value raises ValueError mentioning :32A:."""
-    mt103 = (
-        ":20:REF\n"
-        ":32A:GARBAGE\n"
-        ":59:/GB29NWBK60161331926819\n"
-        "ACME TRADING LTD\n"
-    )
+    mt103 = ":20:REF\n:32A:GARBAGE\n:59:/GB29NWBK60161331926819\nACME TRADING LTD\n"
     with pytest.raises(ValueError, match=":32A:"):
         parse_mt103(mt103)
 
 
 def test_missing_beneficiary_raises() -> None:
     """A payload with no :59:/:59A:/:59F: raises ValueError."""
-    mt103 = ":20:REF\n" ":32A:260712EUR100,00\n" ":71A:OUR\n"
+    mt103 = ":20:REF\n:32A:260712EUR100,00\n:71A:OUR\n"
     with pytest.raises(ValueError, match="beneficiary"):
         parse_mt103(mt103)
 
 
 def test_beneficiary_without_name_raises() -> None:
     """A beneficiary field carrying only an account (no name) raises."""
-    mt103 = (
-        ":20:REF\n"
-        ":32A:260712EUR100,00\n"
-        ":59:/GB29NWBK60161331926819\n"
-        ":71A:OUR\n"
-    )
+    mt103 = ":20:REF\n:32A:260712EUR100,00\n:59:/GB29NWBK60161331926819\n:71A:OUR\n"
     with pytest.raises(ValueError, match="no name"):
         parse_mt103(mt103)
