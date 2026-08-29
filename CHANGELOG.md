@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This package's version follows the [`pacs008`](https://github.com/sebastienrousseau/pacs008)
 suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
+## [0.0.12] - 2026-08-29
+
+Aligns the `pacs008` suite on one version number, and adds the gates this
+repository was missing.
+
+### Added
+
+- `benches/bench_parse_mt103.py`. It measures the cost of one call and
+  documents why there is no batch axis: concatenating two MT103s returns
+  one record, the second dropped silently, so a throughput curve built
+  that way would divide by messages never parsed. The benchmark asserts
+  that rather than only describing it.
+- `docs/benchmarks.md` and `CONTRIBUTING.md`.
+- `scripts/check_suite_consistency.py` and a scheduled `Suite
+  Consistency` workflow comparing this tree, and every published member,
+  against PyPI.
+- `tests/test_suite_conformance.py`, the shared suite conformance gate.
+- **A formatter.** This repository linted with `ruff check` but never
+  formatted, which the conformance gate correctly refuses. `ruff format
+  --check` now runs in CI; three files were normalised by it.
+
+### Changed
+
+- Version aligned to `0.0.12` across `pacs008`, `pacs008-mcp` and
+  `pacs008-loader-mt103`, which had drifted to `0.0.11`, `0.0.9` and
+  `0.0.3`.
+- `SECURITY.md`'s supported-version table follows the bump.
+
 ## [0.0.3] - 2026-07-26
 
 ### Added
