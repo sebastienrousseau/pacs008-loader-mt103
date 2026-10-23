@@ -4,7 +4,7 @@
 PY ?= .venv/bin/python
 PKG := pacs008_loader_mt103
 
-.PHONY: help install test cov lint format typecheck docstrings examples check clean
+.PHONY: help install test cov lint format typecheck docstrings examples audit pip-compile check clean
 
 help: ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -35,6 +35,24 @@ docstrings: ## 100% docstring coverage gate.
 
 examples: ## Run every example end-to-end.
 	@for e in examples/*.py; do echo "--- $$e ---"; $(PY) "$$e"; done
+
+audit: ## pip-audit every hash-pinned requirements file (needs requirements/audit.txt).
+	@for f in requirements/*.txt; do \
+		echo "--- $$f"; \
+		pip-audit --progress-spinner off --require-hashes --disable-pip -r "$$f" || exit 1; \
+	done
+
+pip-compile: ## Regenerate hash-pinned requirements/*.txt from requirements/*.in (needs uv).
+	@command -v uv >/dev/null || { echo "uv is required: https://docs.astral.sh/uv/"; exit 1; }
+	@for f in requirements/*.in; do \
+		[ "$$f" = requirements/fuzz.in ] && continue; \
+		echo "compiling $$f"; \
+		uv pip compile --quiet --generate-hashes --universal \
+			--python-version 3.10 "$$f" -o "$${f%.in}.txt"; \
+	done
+	@echo "compiling requirements/fuzz.in (Linux x86_64, Atheris wheels only)"
+	@uv pip compile --quiet --generate-hashes --python-platform x86_64-manylinux_2_17 \
+		--python-version 3.12 requirements/fuzz.in -o requirements/fuzz.txt
 
 check: test lint typecheck docstrings examples ## Run every gate.
 
