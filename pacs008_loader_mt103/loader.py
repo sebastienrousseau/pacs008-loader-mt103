@@ -58,6 +58,7 @@ as hard requirements that raise :class:`ValueError`.
 
 from __future__ import annotations
 
+import datetime
 import re
 from collections.abc import Iterator
 from typing import Any
@@ -85,8 +86,14 @@ _DEFAULT_SETTLEMENT_METHOD = "CLRG"
 # digits plus an optional single option letter (20, 21, 23B, 32A, 50K, 71A).
 _FIELD_HEAD_RE = re.compile(r"^:(\d{2}[A-Z]?):", re.MULTILINE)
 
-# :32A:260712EUR1234,56  ->  YYMMDD | CCY (3 alpha) | amount (comma-decimal)
-_F32A_RE = re.compile(r"^(?P<date>\d{6})(?P<ccy>[A-Z]{3})(?P<amt>[\d.,]+)$")
+# :32A:260712EUR1234,56  ->  YYMMDD | CCY (3 alpha) | amount (comma-decimal).
+# The amount is SWIFT 15d: digits with at most one decimal comma, at most 15
+# characters with the comma, and never a dot: "1.234" is a thousands
+# separator or a foreign decimal point, and reading it either way would be a
+# guess about someone's money.
+_F32A_RE = re.compile(
+    r"^(?P<date>\d{6})(?P<ccy>[A-Z]{3})(?P<amt>(?=[\d,]{1,15}$)\d+(?:,\d*)?)$"
+)
 
 # A BIC is 8 or 11 chars; this mirrors the pacs.008 schema BIC pattern so any
 # line we accept as a BIC also passes downstream validation.
@@ -195,14 +202,28 @@ def _parse_value_date(yymmdd: str) -> str:
     """Format a 6-char ``YYMMDD`` value date as an ISO datetime at midnight.
 
     Years use the SWIFT sliding window: 00-79 -> 20YY, 80-99 -> 19YY.
+
+    Raises:
+        ValueError: If the value names a date that does not exist
+            (``000000``, 30 February, 29 February in a common year).
     """
     year = int(yymmdd[0:2])
     century = 2000 if year < 80 else 1900
-    return f"{century + year:04d}-{yymmdd[2:4]}-{yymmdd[4:6]}T00:00:00"
+    try:
+        day = datetime.date(century + year, int(yymmdd[2:4]), int(yymmdd[4:6]))
+    except ValueError as exc:
+        raise ValueError(f"Malformed :32A: value date {yymmdd!r}: {exc}") from None
+    return f"{day.isoformat()}T00:00:00"
 
 
 def _parse_f32a(value: str) -> tuple[str, str, float]:
-    """Parse ``:32A:`` into (creation_date_time, currency, amount)."""
+    """Parse ``:32A:`` into (creation_date_time, currency, amount).
+
+    Raises:
+        ValueError: If the value is not a six-digit date, a currency code
+            and a SWIFT amount (digits, at most one decimal comma, 15
+            characters at most), or the date does not exist.
+    """
     match = _F32A_RE.match(value.replace("\n", "").strip())
     if not match:
         raise ValueError(f"Malformed :32A: value date/currency/amount {value!r}")
