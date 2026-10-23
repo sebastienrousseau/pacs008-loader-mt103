@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This package's version follows the [`pacs008`](https://github.com/sebastienrousseau/pacs008)
 suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
+## [0.0.15] - 2026-10-23
+
+Released in lockstep with `pacs008` 0.0.15, the suite's convergence
+release. This package skips 0.0.13 and 0.0.14, which `pacs008-mcp`
+published alone. Parser fixes change what `parse_mt103` accepts for
+`:32A:`; everything else is supply chain and CI.
+
+### Fixed
+
+- `:32A:` value dates that do not exist are rejected with a `ValueError`
+  naming `:32A:`. `000000` used to come back as `2000-00-00` and
+  `260230` as `2026-02-30`.
+- `:32A:` amounts outside the SWIFT form are rejected with a
+  `ValueError` naming `:32A:`. **Behaviour change:** an amount with a
+  dot (`EUR1.234`, `EUR1000.50`) used to be read as a decimal point and
+  is now refused, because SWIFT amounts never carry one; `1,2,3` and a
+  bare `,` now raise the documented error instead of float's own; an
+  amount over 15 characters (SWIFT `15d`), which could become an
+  infinite amount, is refused.
+- The README's latest-release callout said v0.0.3 through 0.0.12.
+
+### Changed
+
+- `pacs008 >= 0.0.15, < 1` (was `>= 0.0.7`), in `pyproject.toml` and
+  every `requirements/*.in`.
+- Every CI install is hash-pinned from `requirements/*.txt`, compiled by
+  `uv` (`make pip-compile`), and every action is pinned by commit SHA.
+  The release build runs with `--no-isolation` from the pinned build
+  tree. `certifi` is floored at 2026.10.19 (GHSA-6q48-6c7w-9gw2) in
+  every tree that resolves it.
+- New CI gates: CodeQL (security-and-quality), OpenSSF Scorecard, DCO,
+  `pip-audit` over every requirements file, complexity ceilings against
+  `complexity-baseline.json` (one offender, `parse_mt103`), Atheris
+  fuzzing (`fuzz/`) and Hypothesis fuzzing in the test suite, mypy
+  `--strict` over `scripts/`, and `scripts/verify_versions.py`
+  ("Version sources agree").
+- Releases attach SLSA build provenance, sigstore signatures and
+  CycloneDX and SPDX SBOMs, and publish with PEP 740 attestations.
+- The Makefile runs what CI runs; `make check` is the full gate.
+
 ## [0.0.12] - 2026-08-29
 
 Aligns the `pacs008` suite on one version number, and adds the gates this

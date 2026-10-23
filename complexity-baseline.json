@@ -1,0 +1,7 @@
+{
+  "pacs008_loader_mt103/loader.py::parse_mt103": {
+    "cognitive": 27,
+    "cyclomatic": 19,
+    "lines": 93
+  }
+}

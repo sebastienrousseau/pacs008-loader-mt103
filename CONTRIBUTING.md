@@ -9,13 +9,13 @@ suite already understands, and nothing else.
 Everything CI checks, you can run locally:
 
 ```sh
-pip install -e ".[dev]"
-pytest                                        # tests + the coverage gate
-ruff check pacs008_loader_mt103/ tests/ examples/ benches/ scripts/
-ruff format --check pacs008_loader_mt103/ tests/ examples/ benches/ scripts/ scripts/
-mypy pacs008_loader_mt103/
-python benches/bench_parse_mt103.py --quick   # the benchmark still runs
+make install   # .venv from the hash-pinned requirements/*.txt
+make check     # lint, mypy, version sources, tests, docstrings, examples, bench
+make audit     # pip-audit over every requirements file (needs requirements/audit.txt)
 ```
+
+`requirements/*.txt` are generated from `requirements/*.in` with
+`make pip-compile` (needs `uv`); edit the `.in` file, never the `.txt`.
 
 `pytest` fails below **100% branch coverage**. That is not a stretch goal
 here — the package is a few hundred lines, and the branches that go untested
@@ -25,8 +25,11 @@ its keep.
 ## What the tests are for
 
 - `tests/test_loader.py` — the parse itself, valid and malformed.
-- `tests/test_stress.py` — large payloads, marked `perf` and excluded from
-  the default run. Select with `pytest -m perf --no-cov`.
+- `tests/test_fuzz.py`: Hypothesis properties over arbitrary and
+  MT103-shaped input, plus a replay of `fuzz/corpus/`. The same contract
+  runs under Atheris in `.github/workflows/fuzz.yml` (Linux x86_64 only).
+- `tests/test_verify_versions.py`: each version restatement is seen to
+  fail when it drifts.
 - `tests/test_suite_conformance.py` — shared across all 32 repositories in
   the suite. **Do not edit it here.** It is generated from one canonical copy,
   and a local edit fails `test_this_file_is_the_canonical_copy` by design;
@@ -46,8 +49,10 @@ will tell you and a month-end statement file will.
 ## Versioning
 
 The version is restated in `pyproject.toml` and
-`pacs008_loader_mt103/__init__.py`. Change both, add a `CHANGELOG.md` entry,
-and the conformance tests will confirm they agree — they exist because the
+`pacs008_loader_mt103/__init__.py`. Change both, add a `CHANGELOG.md` entry
+and `releases/vX.Y.Z.md`, update the `SECURITY.md` table, the README
+callout and the `pacs008 >=` floor, and `make verify-versions` and the
+conformance tests will confirm they agree — they exist because the
 suite has already published a release whose `__version__` reported the
 previous one.
 

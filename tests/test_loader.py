@@ -313,6 +313,44 @@ def test_malformed_value_date_amount_raises() -> None:
         parse_mt103(mt103)
 
 
+@pytest.mark.parametrize(
+    "f32a",
+    ["000000EUR100,00", "260230EUR100,00", "250229EUR100,00", "261301EUR100,00"],
+    ids=["zero", "february-30", "february-29-common-year", "month-13"],
+)
+def test_value_date_that_does_not_exist_raises(f32a: str) -> None:
+    """A :32A: value date that names no real day raises naming :32A:."""
+    mt103 = f":20:REF\n:32A:{f32a}\n:59:ACME TRADING LTD\n"
+    with pytest.raises(ValueError, match=":32A:"):
+        parse_mt103(mt103)
+
+
+def test_leap_day_value_date_is_accepted() -> None:
+    """29 February in a leap year is a real date."""
+    mt103 = ":20:REF\n:32A:240229EUR100,00\n:59:ACME TRADING LTD\n"
+    (record,) = parse_mt103(mt103)
+    assert record["creation_date_time"] == "2024-02-29T00:00:00"
+
+
+@pytest.mark.parametrize(
+    "amount",
+    ["1.234", "1000.50", "1,2,3", ",", "9" * 16, "9" * 400],
+    ids=["dot", "dot-decimal", "two-commas", "bare-comma", "16-digits", "overflow"],
+)
+def test_amount_outside_the_swift_form_raises(amount: str) -> None:
+    """A :32A: amount that is not SWIFT 15d raises naming :32A:."""
+    mt103 = f":20:REF\n:32A:260712EUR{amount}\n:59:ACME TRADING LTD\n"
+    with pytest.raises(ValueError, match=":32A:"):
+        parse_mt103(mt103)
+
+
+def test_fifteen_character_amount_is_accepted() -> None:
+    """15 characters, the decimal comma included, is the SWIFT maximum."""
+    mt103 = ":20:REF\n:32A:260712EUR" + "9" * 12 + ",99\n:59:ACME TRADING LTD\n"
+    (record,) = parse_mt103(mt103)
+    assert record["interbank_settlement_amount"] == 999999999999.99
+
+
 def test_missing_beneficiary_raises() -> None:
     """A payload with no :59:/:59A:/:59F: raises ValueError."""
     mt103 = ":20:REF\n:32A:260712EUR100,00\n:71A:OUR\n"
