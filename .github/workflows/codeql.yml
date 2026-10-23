@@ -1,0 +1,60 @@
+# CodeQL over the Python sources with the security-and-quality suite.
+# Dependencies are installed so CodeQL resolves imports.
+name: 🔍 CodeQL Security Scanning
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '20 3 * * *' # daily 03:20 UTC, offset from other scans
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      # Hash-pinned (OpenSSF Scorecard Pinned-Dependencies): the lint tree
+      # carries pacs008 and the script tooling, and the package installs
+      # with --no-deps on top.
+      - name: Install the package and its dependencies (hash-pinned)
+        run: |
+          pip install --require-hashes -r requirements/lint.txt
+          pip install --no-deps -e .
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-and-quality
+          setup-python-dependencies: false
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4
+        with:
+          category: "/language:${{ matrix.language }}"
+          upload: true
+          fail-on: error

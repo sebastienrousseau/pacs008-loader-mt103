@@ -35,6 +35,7 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
+from typing import Any
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -71,7 +72,7 @@ def tree_version() -> str:
     return str(poetry.get("version") or data["project"]["version"])
 
 
-def check() -> tuple[list[str], dict[str, object]]:
+def check() -> tuple[list[str], dict[str, Any]]:
     """Return (problems, report)."""
     problems: list[str] = []
     tree = tree_version()
@@ -115,7 +116,7 @@ def main() -> int:
         print()
     else:
         print(f"tree version: {report['tree']}")
-        for name, version in report["published"].items():  # type: ignore[union-attr]
+        for name, version in report["published"].items():
             print(f"  {name:34} {version}")
         if problems:
             print("\nproblems:")
