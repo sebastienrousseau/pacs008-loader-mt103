@@ -1,5 +1,14 @@
 # pacs008-loader-mt103: MT103 → pacs.008 loader
 
+<p align="center">
+  <a href="https://github.com/sebastienrousseau/pacs008-loader-mt103/actions"><img src="https://img.shields.io/github/actions/workflow/status/sebastienrousseau/pacs008-loader-mt103/ci.yml?style=for-the-badge&logo=github" alt="Build" height="28" /></a>
+  <a href="https://pypi.org/project/pacs008-loader-mt103/"><img src="https://img.shields.io/pypi/v/pacs008-loader-mt103?style=for-the-badge&color=fc8d62&logo=python" alt="Registry" height="28" /></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/sebastienrousseau/pacs008-loader-mt103"><img src="https://img.shields.io/ossf-scorecard/github.com/sebastienrousseau/pacs008-loader-mt103?style=for-the-badge&label=OpenSSF%20Scorecard&logo=openssf" alt="OpenSSF Scorecard" height="28" /></a>
+  <a href="https://www.bestpractices.dev/projects/15823"><img src="https://img.shields.io/cii/level/15823?style=for-the-badge&label=OpenSSF%20Best%20Practices&logo=openssf" alt="OpenSSF Best Practices" height="28" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg?style=for-the-badge" alt="License: Apache-2.0 OR MIT" height="28" /></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%2B-93450a.svg?style=for-the-badge&logo=python" alt="Python 3.10 or newer" height="28" /></a>
+</p>
+
 **Convert legacy SWIFT MT103 single customer credit transfers into the
 flat records that the [`pacs008`][core] library validates and turns
 into ISO 20022 pacs.008 XML.** A single `parse_mt103(text)` call
