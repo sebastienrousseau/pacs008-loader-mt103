@@ -14,6 +14,6 @@ pacs.008 XML.
 
 from pacs008_loader_mt103.loader import parse_mt103
 
-__version__ = "0.0.12"
+__version__ = "0.0.15"
 
 __all__ = ["parse_mt103", "__version__"]

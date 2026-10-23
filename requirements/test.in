@@ -5,7 +5,7 @@
 # Scorecard Pinned-Dependencies). The package installs with --no-deps on
 # top of this tree.
 # Regenerate with: make pip-compile
-pacs008>=0.0.12,<1
+pacs008>=0.0.15,<1
 pytest>=8,<10
 pytest-cov>=5,<8
 interrogate>=1.7
