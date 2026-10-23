@@ -33,6 +33,7 @@ certifi==2026.10.19 \
     #   -r requirements/test.in
     #   httpcore
     #   httpx
+    #   pacs008
 cffi==2.1.1 ; platform_python_implementation != 'PyPy' \
     --hash=sha256:046bfc24911b37851ee1b51aab8bffe713d89c68c6a057b09484ce9fd5f69b4e \
     --hash=sha256:06c72bb76605a4b0cd0aad6930b69d4baf7dd5d806cfc409b824191099700e66 \
@@ -1279,9 +1280,9 @@ packaging==26.3 \
     --hash=sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79 \
     --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
     # via pytest
-pacs008==0.0.12 \
-    --hash=sha256:598c716b4278e84394aab5ee1391e17e2c8c6ad2c9ce5f95b13e1bca7580daa6 \
-    --hash=sha256:61d5f9901b76de494ac459703cfb1d025261c098b6ef783ba6c5c54ec56afdf9
+pacs008==0.0.15 \
+    --hash=sha256:39c9f2782990ee02d263707413e565b3db3d6982abae14ae239a4664d70a0cfb \
+    --hash=sha256:e5c91e5ce8e7538db8dddf4bc1612c117108f584d3d83c0218634bb777e61220
     # via -r requirements/test.in
 pluggy==1.7.0 \
     --hash=sha256:7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec \
