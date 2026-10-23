@@ -8,7 +8,7 @@ PY ?= .venv/bin/python
 BIN := $(dir $(PY))
 PKG := pacs008_loader_mt103
 
-.PHONY: help install test cov lint format typecheck docstrings examples bench audit verify-versions pip-compile fuzz check clean
+.PHONY: help install test cov lint format typecheck docstrings examples bench complexity audit verify-versions pip-compile fuzz check clean
 
 help: ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -48,6 +48,9 @@ examples: ## Run every example end-to-end.
 bench: ## The benchmark in quick mode (what CI runs).
 	$(PY) benches/bench_parse_mt103.py --quick
 
+complexity: ## Complexity ceilings against complexity-baseline.json.
+	$(PY) scripts/check_complexity.py
+
 audit: ## pip-audit every hash-pinned requirements file (needs requirements/audit.txt).
 	@for f in requirements/*.txt; do \
 		echo "--- $$f"; \
@@ -72,7 +75,7 @@ verify-versions: ## Every restatement of the version agrees with pyproject.toml.
 fuzz: ## Atheris for FUZZ_SECONDS (default 60); Linux x86_64, needs requirements/fuzz.txt.
 	$(PY) fuzz/fuzz_parse_mt103.py fuzz/corpus -max_total_time=$(or $(FUZZ_SECONDS),60)
 
-check: lint typecheck verify-versions test docstrings examples bench ## Run every gate CI runs on a pull request.
+check: lint typecheck complexity verify-versions test docstrings examples bench ## Run every gate CI runs on a pull request.
 
 clean: ## Remove caches and build artefacts.
 	rm -rf .pytest_cache .mypy_cache .ruff_cache .coverage build dist *.egg-info
