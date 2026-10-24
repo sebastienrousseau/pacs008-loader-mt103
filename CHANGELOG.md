@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This package's version follows the [`pacs008`](https://github.com/sebastienrousseau/pacs008)
 suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
+## [Unreleased]
+
+### Security
+
+- `requirements/audit.txt`, the CI audit job's pip-audit environment, is
+  compiled for Python 3.12, the only Python that installs it, and floors
+  `filelock` at `>=4.2.1` (GHSA-9vhv-jxww-xfm5, GHSA-567q-5qvw-pf92,
+  GHSA-v4x8-3wr5-3wq8). The Python 3.10 split had pinned `filelock 4.1.0`;
+  4.2.1 needs Python 3.11.
+
 ## [0.0.15] - 2026-10-23
 
 Released in lockstep with `pacs008` 0.0.15, the suite's convergence
