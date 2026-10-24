@@ -14,6 +14,16 @@ release. This package skips 0.0.13 and 0.0.14, which `pacs008-mcp`
 published alone. Parser fixes change what `parse_mt103` accepts for
 `:32A:`; everything else is supply chain and CI.
 
+### Security
+
+- **An unterminated block-4 opener no longer costs quadratic time**
+  (CWE-1333). `parse_mt103` found the `{4:...-}` envelope with a lazy
+  regular expression, so each `{4:` without a closing `-}` made the
+  search scan to the end of the text again: 60 KB of `{4:` took about
+  6.5 seconds before the input was rejected. The envelope is now found
+  in one pass, with the same result on every input. Every release up to
+  0.0.12 is affected.
+
 ### Fixed
 
 - `:32A:` value dates that do not exist are rejected with a `ValueError`

@@ -5,11 +5,14 @@
 
 from __future__ import annotations
 
+import time
+
 import pytest
 from pacs008.csv.validate_csv_data import validate_csv_data
 from pacs008.validation.schema_validator import SchemaValidator
 
 from pacs008_loader_mt103 import __version__, parse_mt103
+from pacs008_loader_mt103.loader import _unwrap_block4
 
 # Target ISO 20022 message type for the flat records produced here.
 PACS008_MESSAGE_TYPE = "pacs.008.001.08"
@@ -281,6 +284,45 @@ def test_raw_block4_envelope_is_unwrapped() -> None:
     (record,) = parse_mt103(wrapped)
     assert record["msg_id"] == "REF20240712001"
     assert record["charge_bearer"] == "SHAR"
+
+
+def test_unterminated_block4_openers_are_rejected_promptly() -> None:
+    """60 KB of ``{4:`` with no ``-}`` is rejected in well under a second.
+
+    The payload has no :20:, so it must raise; the envelope lookup must
+    take one pass over the text whatever the number of openers.
+    """
+    hostile = "{4:" * 20_000
+    start = time.perf_counter()
+    with pytest.raises(ValueError, match=":20:"):
+        parse_mt103(hostile)
+    assert time.perf_counter() - start < 1.0
+
+
+@pytest.mark.parametrize(
+    ("payload", "body"),
+    [
+        ("{4:\n:20:A\n-}", "\n:20:A\n"),
+        ("x{4::20:A-}{4::20:B-}", ":20:A"),
+        ("{4:{4::20:A-}", "{4::20:A"),
+        ("{4::20:A\n-}\n-}", ":20:A\n"),
+        ("{4::20:A", "{4::20:A"),
+        (":20:A-}", ":20:A-}"),
+        ("-}{4::20:A", "-}{4::20:A"),
+    ],
+    ids=[
+        "plain",
+        "first-wins",
+        "nested-opener",
+        "first-closer",
+        "open",
+        "close",
+        "reversed",
+    ],
+)
+def test_block4_unwrapping_keeps_its_rules(payload: str, body: str) -> None:
+    """The first ``{4:`` up to the first ``-}`` after it, else the text as is."""
+    assert _unwrap_block4(payload) == body
 
 
 def test_missing_sender_reference_raises() -> None:
