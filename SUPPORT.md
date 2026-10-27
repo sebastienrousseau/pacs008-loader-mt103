@@ -46,7 +46,7 @@ disclosure process in [SECURITY.md](SECURITY.md).
 
 | Version | Supported? |
 | :--- | :--- |
-| 0.0.2 (latest) | ✅ |
+| 0.0.16 (latest) | ✅ |
 
 Requires Python 3.11+ and the `pacs008` core; the floor is in
 `pyproject.toml`.

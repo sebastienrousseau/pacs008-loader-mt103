@@ -9,6 +9,16 @@ suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
 ## [Unreleased]
 
+## [0.0.16] - 2026-10-27
+
+Released in lockstep with `pacs008` 0.0.16. Python 3.10 is no longer
+supported (see Removed); the parser is unchanged.
+
+### Changed
+
+- The GitHub release is titled `pacs008-loader-mt103 X.Y.Z` (the
+  project name and the bare version), not the tag.
+
 ### Security
 
 - `requirements/audit.txt`, the CI audit job's pip-audit environment, is
@@ -169,6 +179,10 @@ records feed straight into pacs.008 generation.
 - A parsed record is verified schema-valid against the real
   `pacs008` `SchemaValidator("pacs.008.001.08")` in the test suite.
 
+[Unreleased]: https://github.com/sebastienrousseau/pacs008-loader-mt103/compare/v0.0.16...HEAD
+[0.0.16]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.16
+[0.0.15]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.15
+[0.0.12]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.12
 [0.0.3]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.3
 [0.0.2]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.2
 [0.0.1]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.1
