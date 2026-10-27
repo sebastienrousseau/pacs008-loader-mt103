@@ -17,6 +17,20 @@ suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
   GHSA-v4x8-3wr5-3wq8). The Python 3.10 split had pinned `filelock 4.1.0`;
   4.2.1 needs Python 3.11.
 
+### Removed
+
+- Python 3.10 is no longer supported: `requires-python` is `>=3.11`, in
+  step with the `pacs008` core, as 3.10 reaches end of life in October
+  2026. The 3.10 classifier goes, CI tests 3.11 to 3.14, and ruff and
+  mypy target 3.11. The `tomli` fallback in
+  `scripts/check_suite_consistency.py` goes, with `tomli` in
+  `requirements/lint.in` and `test.in`. `make pip-compile` compiles for
+  3.11, so `build.txt`, `complexity.txt`, `lint.txt`, `runtime.txt` and
+  `test.txt` lose their 3.10-only lines (exceptiongroup, tomli,
+  importlib-metadata 9.0.1, more-itertools 11.1.0, typing-extensions,
+  and the older coverage, hypothesis, pycparser, rpds-py, starlette and
+  websockets pins); no other pin moves.
+
 ## [0.0.15] - 2026-10-23
 
 Released in lockstep with `pacs008` 0.0.15, the suite's convergence
