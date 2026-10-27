@@ -4,6 +4,6 @@
 # under the built wheel (--no-deps) for the SBOM, so the SBOM lists what a
 # user's install resolves today.
 # Regenerate with: make pip-compile
-pacs008>=0.0.15,<1
+pacs008>=0.0.16,<1
 # GHSA-6q48-6c7w-9gw2: no affected certifi may resolve.
 certifi>=2026.10.19

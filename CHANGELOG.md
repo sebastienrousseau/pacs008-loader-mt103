@@ -9,6 +9,19 @@ suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
 
 ## [Unreleased]
 
+## [0.0.16] - 2026-10-27
+
+Released in lockstep with `pacs008` 0.0.16. Python 3.10 is no longer
+supported (see Removed); the parser is unchanged.
+
+### Changed
+
+- `pacs008 >= 0.0.16, < 1`: the core of the same release, so an older
+  core and the advisory floors it declares cannot resolve under this
+  one. The hash-pinned requirement trees are re-locked against it.
+- The GitHub release is titled `pacs008-loader-mt103 X.Y.Z` (the
+  project name and the bare version), not the tag.
+
 ### Security
 
 - `requirements/audit.txt`, the CI audit job's pip-audit environment, is
@@ -16,6 +29,20 @@ suite; a `0.0.X` release of this package targets the `0.0.X` line of `pacs008`.
   `filelock` at `>=4.2.1` (GHSA-9vhv-jxww-xfm5, GHSA-567q-5qvw-pf92,
   GHSA-v4x8-3wr5-3wq8). The Python 3.10 split had pinned `filelock 4.1.0`;
   4.2.1 needs Python 3.11.
+
+### Removed
+
+- Python 3.10 is no longer supported: `requires-python` is `>=3.11`, in
+  step with the `pacs008` core, as 3.10 reaches end of life in October
+  2026. The 3.10 classifier goes, CI tests 3.11 to 3.14, and ruff and
+  mypy target 3.11. The `tomli` fallback in
+  `scripts/check_suite_consistency.py` goes, with `tomli` in
+  `requirements/lint.in` and `test.in`. `make pip-compile` compiles for
+  3.11, so `build.txt`, `complexity.txt`, `lint.txt`, `runtime.txt` and
+  `test.txt` lose their 3.10-only lines (exceptiongroup, tomli,
+  importlib-metadata 9.0.1, more-itertools 11.1.0, typing-extensions,
+  and the older coverage, hypothesis, pycparser, rpds-py, starlette and
+  websockets pins); no other pin moves.
 
 ## [0.0.15] - 2026-10-23
 
@@ -155,6 +182,10 @@ records feed straight into pacs.008 generation.
 - A parsed record is verified schema-valid against the real
   `pacs008` `SchemaValidator("pacs.008.001.08")` in the test suite.
 
+[Unreleased]: https://github.com/sebastienrousseau/pacs008-loader-mt103/compare/v0.0.16...HEAD
+[0.0.16]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.16
+[0.0.15]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.15
+[0.0.12]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.12
 [0.0.3]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.3
 [0.0.2]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.2
 [0.0.1]: https://github.com/sebastienrousseau/pacs008-loader-mt103/releases/tag/v0.0.1
