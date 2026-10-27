@@ -16,6 +16,9 @@ supported (see Removed); the parser is unchanged.
 
 ### Changed
 
+- `pacs008 >= 0.0.16, < 1`: the core of the same release, so an older
+  core and the advisory floors it declares cannot resolve under this
+  one. The hash-pinned requirement trees are re-locked against it.
 - The GitHub release is titled `pacs008-loader-mt103 X.Y.Z` (the
   project name and the bare version), not the tag.
 

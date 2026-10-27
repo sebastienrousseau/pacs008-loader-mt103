@@ -1265,9 +1265,9 @@ packaging==26.3 \
     --hash=sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79 \
     --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
     # via pytest
-pacs008==0.0.15 \
-    --hash=sha256:39c9f2782990ee02d263707413e565b3db3d6982abae14ae239a4664d70a0cfb \
-    --hash=sha256:e5c91e5ce8e7538db8dddf4bc1612c117108f584d3d83c0218634bb777e61220
+pacs008==0.0.16 \
+    --hash=sha256:d8676af59b33b7d1b2fb5ecf72dd6c76ffaecdf4a6f5182430a54845937d9994 \
+    --hash=sha256:e350e1640b8d248bae9025bde8f78cbe7a07e0142ec8e0817fe86b9c504e4915
     # via -r requirements/test.in
 pluggy==1.7.0 \
     --hash=sha256:7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec \

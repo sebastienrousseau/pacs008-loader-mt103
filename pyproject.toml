@@ -30,7 +30,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "pacs008 >= 0.0.15, < 1",
+    "pacs008 >= 0.0.16, < 1",
 ]
 
 [project.optional-dependencies]
