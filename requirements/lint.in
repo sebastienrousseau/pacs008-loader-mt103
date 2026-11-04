@@ -4,9 +4,9 @@
 # included so mypy --strict resolves the real package.
 # Regenerate with: make pip-compile
 pacs008>=0.0.16,<1
-ruff==0.17.2
+ruff==0.17.3
 mypy>=1.11,<3
 # The complexity gate is type-checked with its own tools installed.
 -r complexity.in
 # GHSA-6q48-6c7w-9gw2: no affected certifi may resolve.
-certifi>=2026.10.19
+certifi>=2026.10.23
