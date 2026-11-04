@@ -14,4 +14,4 @@ hypothesis>=6.100
 # tests/test_check_complexity.py imports the gate, so its tools are here too.
 -r complexity.in
 # GHSA-6q48-6c7w-9gw2: no affected certifi may resolve.
-certifi>=2026.10.19
+certifi>=2026.10.23
